@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Front Gallery — Sample</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+:root{
+  --bg-color:#181820;
+  --text-color:#fff;
+  --accent:#39d353;
+  --subtle:#b0b0b0;
+  --card-bg: rgba(8,8,10,0.55);
+  --card-border: rgba(57,211,83,0.18);
+  --glass-blur: 6px;
+  --card-radius:18px;
+}
+
+/* Reset + base */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Roboto Mono', monospace;
+  color:var(--text-color);
+  background: linear-gradient(to bottom, #000000, var(--bg-color));
+  overflow-x:hidden;
+  line-height:1.5;
+  position:relative;
+}
+
+/* Header + hero (kept mostly from original) */
+header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:20px 50px; z-index:3; position:relative;
+}
+header h1{font-weight:700;font-size:1.4rem;letter-spacing:1px}
+nav a{color:var(--text-color);text-decoration:none;margin-left:22px;font-weight:500;transition:color .2s}
+nav a:hover{color:var(--accent)}
+
+/* Hero */
+.hero{
+  text-align:center;padding:28px 20px 16px;z-index:2;position:relative;
+}
+.hero h2{font-size:1.6rem;font-weight:700;margin-bottom:6px}
+.hero h2 .accent{color:var(--accent)}
+.hero p{color:var(--subtle);font-size:1.05rem;margin-bottom:8px}
+.hero button{
+  background:transparent;border:2px solid var(--accent);color:var(--accent);
+  padding:8px 16px;font-weight:700;border-radius:6px;cursor:pointer;transition:all .2s
+}
+.hero button:hover{background:var(--accent);color:var(--bg-color)}
+
+/* Canvas sits behind everything */
+#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none}
+
+/* Page layout */
+.page-wrap{max-width:1400px;margin:18px auto;padding:12px 18px;position:relative;z-index:2}
+.content-area{display:grid;grid-template-columns:1fr 360px;gap:18px;align-items:start}
+
+/* Left panel: search + grid */
+.tools{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.back-btn{display:inline-flex;align-items:center;justify-content:center;width:52px;height:44px;border-radius:10px;border:1.6px solid var(--card-border);background:var(--card-bg);cursor:pointer}
+.search{flex:1}
+.search input{width:100%;padding:12px 14px;border-radius:8px;border:1.5px solid var(--card-border);background:transparent;color:var(--text-color);font-size:1rem}
+
+.gallery-wrap{background:transparent;padding:6px}
+.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:start}
+.folder-card{
+  height:200px;background:var(--card-bg);border-radius:12px;border:1.6px solid var(--card-border);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;padding:12px;
+}
+.folder-card img{max-width:100%;max-height:100%;object-fit:cover;border-radius:8px;opacity:0.98}
+.folder-card .label{position:absolute;left:18px;bottom:16px;font-size:1.1rem;font-weight:700;color:var(--text-color);text-shadow:0 2px 8px rgba(0,0,0,0.6)}
+
+/* Footer note about scroll */
+.gallery-wrap .note{color:var(--subtle);font-size:.95rem;text-align:center;margin-top:8px}
+
+/* ---------- PROFILE CARD (right side) ---------- */
+.profile-card{
+  position: sticky;
+  top: 33px;
+  width: 510px;
+  max-width: 54vw;
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  border: 1.5px solid var(--card-border);
+  padding: 18px;
+  z-index: 3;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  backdrop-filter: blur(var(--glass-blur));
+  color:var(--text-color);
+}
+
+/* Rounded top highlight (like your image) */
+.profile-avatar{
+  width: 220px;
+  height: 220px;
+  border-radius: 1998px;
+  margin: 0 auto 24px;
+  display:block;
+  overflow:hidden;
+  border: 6px solid rgba(57,211,83,0.98);
+  padding:8px;
+  background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45));
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6), 0 0 14px rgba(57,211,83,0.04) inset;
+}
+.profile-avatar img{width:100%;height:100%;object-fit:cover;display:block;border-radius:999px}
+
+/* small heading inside profile card */
+.profile-title{text-align:center;margin:8px 0 6px;font-weight:700}
+
+/* tags area */
+.tags{display:flex;flex-direction:column;gap:8px;margin-top:12px;max-height:330px;overflow:auto;padding-right:6px}
+.tag-row{display:flex;flex-wrap:wrap;gap:8px}
+.tag{padding:8px 10px;border-radius:8px;border:1.2px solid var(--card-border);background:transparent;color:var(--subtle);cursor:pointer;font-weight:600}
+.tag.selected{background:rgba(57,211,83,0.06);color:var(--accent);border-color:rgba(57,211,83,0.3)}
+
+/* small preview grid for folder thumbnails inside profile card */
+.preview-mini{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.preview-mini img{width:100%;height:48px;object-fit:cover;border-radius:4px;border:1px solid rgba(255,255,255,0.04)}
+
+/* tiny helpers */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* Hover state */
+.folder-card:hover{transform:translateY(-6px);box-shadow:0 12px 28px rgba(0,0,0,0.6)}
+
+/* Responsive: stack on small screens */
+@media (max-width:1000px){
+  .content-area{grid-template-columns:1fr 320px}
+  .gallery-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:780px){
+  .content-area{grid-template-columns:1fr}
+  .profile-card{position:static;transform:none;margin:18px auto;width:92%;max-width:520px}
+  header{padding:16px 20px}
+  .hero{padding:20px 14px 12px}
+  .gallery-grid{grid-template-columns:repeat(2,1fr)}
+}
+  </style>
+</head>
+<body>
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <header>
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="back-btn" id="backBtn" title="Back" aria-label="Back" data-icon="data:svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='20' height='20'%3E%3Cpath d='M15 6l-6 6 6 6' stroke='%2339d353' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E"></button>
+      <h1>My Photo Gallery</h1>
+    </div>
+    <nav aria-label="top navigation">
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+      <a href="#">Collections</a>
+    </nav>
+  </header>
+
+  <div class="hero page-wrap">
+    <div class="hero-inner">
+      <h2>Explore the <span class="accent">Gallery</span></h2>
+      <p class="sub">Search images by text inside the picture, keywords or tags. Click a folder to filter it.</p>
+    </div>
+
+    <div class="content-area">
+      <div>
+        <div class="tools">
+          <div class="back-btn" id="backToPrev" title="Go back">◀</div>
+          <div class="search"><input id="searchInput" placeholder="Search... (try: beach, portrait, text:welcome)" aria-label="Search gallery"></div>
+        </div>
+
+        <div class="gallery-wrap">
+          <div class="gallery-grid" id="galleryGrid">
+            <!-- Example folder items. Each folder-card can be clicked to view that folder. -->
+            <!-- data-title, data-tags, data-text, data-folder are used by the JS search/filter -->
+
+            <div class="folder-card" tabindex="0" role="button" data-folder="Folder 1" data-title="Sunset at the Beach" data-tags="beach,sunset,sea" data-text="welcome to summer" data-thumb="https://i.postimg.cc/T3h61zM1/Placeholder.png">
+              <img loading="lazy" alt="Folder 1 thumbnail" src="https://i.postimg.cc/T3h61zM1/Placeholder.png">
+              <div class="label">Folder 1</div>
+            </div>
+
+            <div class="folder-card" tabindex="0" role="button" data-folder="Folder 2" data-title="Mountain Hike" data-tags="mountain,forest,hike" data-text="trail map here" data-thumb="https://i.postimg.cc/T3h61zM1/Placeholder.png">
+              <img loading="lazy" alt="Folder 2 thumbnail" src="https://i.postimg.cc/T3h61zM1/Placeholder.png">
+              <div class="label">Folder 2</div>
+            </div>
+
+            <div class="folder-card" tabindex="0" role="button" data-folder="Folder 3" data-title="City Nightlife" data-tags="city,night,neon" data-text="open late" data-thumb="https://i.postimg.cc/T3h61zM1/Placeholder.png">
+              <img loading="lazy" alt="Folder 3 thumbnail" src="https://i.postimg.cc/T3h61zM1/Placeholder.png">
+              <div class="label">Folder 3</div>
+            </div>
+
+            <div class="folder-card" tabindex="0" role="button" data-folder="Folder 4" data-title="Portrait Studio" data-tags="portrait,people,studio" data-text="smile" data-thumb="https://i.postimg.cc/T3h61zM1/Placeholder.png0">
+              <img loading="lazy" alt="Folder 4 thumbnail" src="https://i.postimg.cc/T3h61zM1/Placeholder.png">
+              <div class="label">Folder 4</div>
+            </div>
+
+            <div class="folder-card" tabindex="0" role="button" data-folder="Folder 5" data-title="Architecture" data-tags="buildings,city,architecture" data-text="" data-thumb="https://i.postimg.cc/T3h61zM1/Placeholder.png">
+              <img loading="lazy" alt="Folder 5 thumbnail" src="https://i.postimg.cc/T3h61zM1/Placeholder.png">
+              <div class="label">Folder 5</div>
+            </div>
+
+            <div class="folder-card" tabindex="0" role="button" data-folder="Folder 6" data-title="Wildlife" data-tags="animals,wildlife,nature" data-text="lion king" data-thumb="https://i.postimg.cc/T3h61zM1/Placeholder.png">
+              <img loading="lazy" alt="Folder 6 thumbnail" src="https://i.postimg.cc/T3h61zM1/Placeholder.png">
+              <div class="label">Folder 6</div>
+            </div>
+
+            <div class="folder-card" tabindex="0" role="button" data-folder="Folder 7" data-title="Food &amp; Drinks" data-tags="food,drinks,cafe" data-text="menu" data-thumb="https://i.postimg.cc/T3h61zM1/Placeholder.png">
+              <img loading="lazy" alt="Folder 7 thumbnail" src="https://i.postimg.cc/T3h61zM1/Placeholder.png">
+              <div class="label">Folder 7</div>
+            </div>
+
+            <div class="folder-card" tabindex="0" role="button" data-folder="Folder 8" data-title="Abstract" data-tags="abstract,colors,shapes" data-text="" data-thumb="https://i.postimg.cc/T3h61zM1/Placeholder.png">
+              <img loading="lazy" alt="Folder 8 thumbnail" src="https://i.postimg.cc/T3h61zM1/Placeholder.png">
+              <div class="label">Folder 8</div>
+            </div>
+
+          </div>
+          <div class="note">(scrollable if too many folders here)</div>
+        </div>
+      </div>
+
+      <aside class="profile-card" id="rightPanel">
+        <div class="profile-avatar">
+          <img id="previewImg" alt="Hover preview" src="https://i.postimg.cc/T3h61zM1/Placeholder.png">
+        </div>
+        <div class="profile-title">Folder preview</div>
+        <div style="color:var(--subtle);font-size:.95rem;margin-top:6px">Hover a folder to preview. Click a folder to filter gallery. Use tags below to narrow results.</div>
+
+        <div class="tags">
+          <div style="font-weight:700;color:var(--subtle);">Popular tags</div>
+          <div class="tag-row" id="tagRow">
+            <!-- tags will be auto-filled from the dataset below -->
+          </div>
+
+          <div style="font-weight:700;color:var(--subtle);margin-top:8px">Recent thumbnails</div>
+          <div class="preview-mini" id="miniPreviews">
+            <!-- small previews will appear here on hover -->
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <script>
+  // ----------------- Canvas Background (adapted & fixed) -----------------
+  (function(){
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    // Cursor
+    let mouse = { x: -1000, y: -1000 };
+
+    // Background drift
+    let bgOffsetX = 0;
+    let bgOffsetY = 0;
+
+    // Hex settings
+const r = 50; // radius of each hex
+const hexWidth = 2 * r;
+const hexHeight = Math.sqrt(3) * r;
+const colSpacing = Math.sqrt(3) * r; // horizontal distance between hex centers
+const rowSpacing = 1.5 * r;          // vertical distance between rows
+const strokeColor = 'rgba(57,211,83,0.12)';
+const lineWidth = 1.6;
+
+
+    // Ripples
+    let ripples = [];
+
+    // Draw single hex
+    function drawHex(x, y, r) {
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+        const angle = Math.PI / 6 + i * Math.PI / 3; // 30° rotation for pointy top
+        const px = x + r * Math.cos(angle);
+        const py = y + r * Math.sin(angle);
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = lineWidth;
+    ctx.stroke();
+}
+
+
+    // Draw background
+    function drawBackground() {
+        ctx.clearRect(0, 0, width, height);
+
+        // Compute loop bounds based on current offsets
+const startCol = Math.floor(-bgOffsetX / colSpacing) - 3;
+const endCol   = Math.ceil((width - bgOffsetX) / colSpacing) + 3;
+
+const startRow = Math.floor(-bgOffsetY / rowSpacing) - 3;
+const endRow   = Math.ceil((height - bgOffsetY) / rowSpacing) + 3;
+
+
+        for (let row = startRow; row < endRow; row++) {
+    for (let col = startCol; col < endCol; col++) {
+        const offsetX = (row % 2) * (colSpacing / 2); // half-step shift for odd rows
+        const baseX = col * colSpacing + offsetX + bgOffsetX;
+        const baseY = row * rowSpacing + bgOffsetY;
+
+        let dx = baseX - mouse.x;
+        let dy = baseY - mouse.y;
+        let dist = Math.sqrt(dx*dx + dy*dy);
+
+        let adjX = baseX;
+        let adjY = baseY;
+
+        if (dist < 150) {
+            const force = (1 - dist/150) * 4;
+            adjX += Math.sin(dy/20) * force;
+            adjY += Math.cos(dx/20) * force;
+        }
+
+        ripples.forEach(rp => {
+            const dxr = baseX - rp.x;
+            const dyr = baseY - rp.y;
+            const distR = Math.sqrt(dxr*dxr + dyr*dyr);
+            if (distR < 200) {
+                const force = (1 - distR/200) * rp.strength;
+                adjX += Math.sin(dyr/20) * force;
+                adjY += Math.cos(dxr/20) * force;
+            }
+        });
+
+        drawHex(adjX, adjY, r);
+    }
+}
+
+    }
+
+    // Animate
+    function animate() {
+        bgOffsetX += 0.12; // move right
+        bgOffsetY += 0.06;  // move down
+
+        drawBackground();
+
+        ripples = ripples.filter(r => {
+            r.strength -= 0.6;
+            return r.strength > 0;
+        });
+
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+    // Mouse
+    document.addEventListener('mousemove', e => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+    document.addEventListener('mouseleave', () => {
+        mouse.x = -1000;
+        mouse.y = -1000;
+    });
+
+    // Click ripple
+    document.addEventListener('click', e => {
+        ripples.push({ x: e.clientX, y: e.clientY, strength: 18 });
+    });
+
+    // Resize
+    window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    });
+  })();
+
+  // ----------------- Gallery behavior -----------------
+  (function(){
+    const galleryGrid = document.getElementById('galleryGrid');
+    const searchInput = document.getElementById('searchInput');
+    const previewImg = document.getElementById('previewImg');
+    const tagRow = document.getElementById('tagRow');
+    const miniPreviews = document.getElementById('miniPreviews');
+
+    // gather all folder cards
+    const folders = Array.from(document.querySelectorAll('.folder-card'));
+
+    // build tag set
+    const tagSet = new Set();
+    folders.forEach(f => {
+      const t = (f.dataset.tags||'').split(',').map(s=>s.trim()).filter(Boolean);
+      t.forEach(x=>tagSet.add(x));
+    });
+
+    // populate tags
+    tagSet.forEach(t => {
+      const btn = document.createElement('button');
+      btn.className = 'tag';
+      btn.type = 'button';
+      btn.textContent = t;
+      btn.dataset.tag = t;
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('selected');
+        applyFilters();
+      });
+      tagRow.appendChild(btn);
+    });
+
+    // basic search: split tokens and match against title, tags, text
+    function applyFilters(){
+      const q = searchInput.value.trim().toLowerCase();
+      const selectedTags = Array.from(document.querySelectorAll('.tag.selected')).map(b=>b.dataset.tag.toLowerCase());
+
+      const tokens = q.length ? q.split(/\s+/).map(s=>s.trim()).filter(Boolean) : [];
+
+      folders.forEach(card => {
+        const title = (card.dataset.title||'').toLowerCase();
+        const tags = (card.dataset.tags||'').toLowerCase();
+        const text = (card.dataset.text||'').toLowerCase();
+        const folder = (card.dataset.folder||'').toLowerCase();
+
+        // check tokens: all tokens must appear in one of the fields
+        let tokensOK = tokens.every(tok => (title+" "+tags+" "+text+" "+folder).includes(tok));
+
+        // check tag filters: if any selected tags, the card must include all selected tags
+        let tagsOK = selectedTags.every(t => tags.split(',').includes(t));
+
+        card.style.display = (tokensOK && tagsOK) ? '' : 'none';
+      });
+    }
+
+    searchInput.addEventListener('input', applyFilters);
+
+    // folder click -> filter to that folder only (toggle)
+    let activeFolder = null;
+    folders.forEach(card => {
+      card.addEventListener('click', () => {
+        const folderName = card.dataset.folder;
+        if (activeFolder === folderName) {
+          activeFolder = null;
+          // show all
+          folders.forEach(c=>c.style.display='');
+        } else {
+          activeFolder = folderName;
+          folders.forEach(c=>{
+            c.style.display = (c.dataset.folder === folderName) ? '' : 'none';
+          });
+        }
+        // update right panel mini previews
+        updateMiniPreviews();
+      });
+
+      // hover preview
+      card.addEventListener('mouseenter', () => {
+        const src = card.dataset.thumb || card.querySelector('img')?.src;
+        if (src) previewImg.src = src;
+
+        // populate mini previews with images from this folder (demo uses the same thumb)
+        miniPreviews.innerHTML = '';
+        for (let i=0;i<6;i++){
+          const im = document.createElement('img');
+          im.src = src;
+          im.alt = folderName + ' preview ' + i;
+          miniPreviews.appendChild(im);
+        }
+      });
+    });
+
+    // back button behavior
+    document.getElementById('backToPrev').addEventListener('click', ()=>{
+      // in a static site this might just go to index or history.back()
+      if (history.length>1) history.back();
+    });
+
+    // fill the initial mini previews (recent)
+    function updateMiniPreviews(){
+      const visible = folders.filter(f=>f.style.display !== 'none');
+      miniPreviews.innerHTML = '';
+      visible.slice(0,8).forEach(f => {
+        const im = document.createElement('img');
+        im.src = f.dataset.thumb || f.querySelector('img')?.src;
+        im.alt = 'recent';
+        miniPreviews.appendChild(im);
+      });
+    }
+    updateMiniPreviews();
+
+    // keyboard accessibility: Enter on folder triggers click
+    folders.forEach(f => f.addEventListener('keydown', e => { if (e.key === 'Enter') f.click(); }));
+
+  })();
+
+  // small helper to inject data-icon svgs
+  document.querySelectorAll('[data-icon]').forEach(el => {
+    const url = el.dataset.icon;
+    // if the URL is a data: URL, decode it directly
+    if (url && url.startsWith('data:')){
+      try{ el.innerHTML = decodeURIComponent(url.split(',')[1]); }catch(e){ /* ignore */ }
+      return;
+    }
+    fetch(url).then(res=>res.text()).then(svg=>{ el.innerHTML = svg; }).catch(()=>{});
+  });
+  </script>
+</body>
+</html>
