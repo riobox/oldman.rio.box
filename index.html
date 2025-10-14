@@ -3,9 +3,31 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Front Gallery — Sample</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <title>Old Man Edits</title>
   <style>
+  @font-face {
+  font-family: 'Roboto Mono';
+  src: url('/fonts/roboto-mono/RobotoMono-Regular.woff2') format('woff2'),
+       url('/fonts/roboto-mono/RobotoMono-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('/fonts/roboto-mono/RobotoMono-Bold.woff2') format('woff2'),
+       url('/fonts/roboto-mono/RobotoMono-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  font-family: 'Roboto Mono', monospace;
+}
+
+
 :root{
   --bg-color:#181820;
   --text-color:#fff;
@@ -145,94 +167,169 @@ nav a:hover{color:var(--accent)}
   <header>
     <div style="display:flex;align-items:center;gap:12px">
       <button class="back-btn" id="backBtn" title="Back" aria-label="Back" data-icon="data:svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='20' height='20'%3E%3Cpath d='M15 6l-6 6 6 6' stroke='%2339d353' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E"></button>
-      <h1>My Photo Gallery</h1>
+      <h1>My Portfolio</h1>
     </div>
     <nav aria-label="top navigation">
       <a href="#">About</a>
       <a href="#">Contact</a>
-      <a href="#">Collections</a>
     </nav>
   </header>
 
   <div class="hero page-wrap">
     <div class="hero-inner">
-      <h2>Explore the <span class="accent">Gallery</span></h2>
-      <p class="sub">Search images by text inside the picture, keywords or tags. Click a folder to filter it.</p>
+      <h2>Explore the <span class="accent">Old Man Edits Gallery</span></h2>
+      <p class="sub">Search old man edits by text inside the picture, keywords or tags. Click an image to view it.</p>
     </div>
 
     <div class="content-area">
       <div>
         <div class="tools">
           <div class="back-btn" id="backToPrev" title="Go back">◀</div>
-          <div class="search"><input id="searchInput" placeholder="Search... (try: beach, portrait, text:welcome)" aria-label="Search gallery"></div>
+          <div class="search"><input id="searchInput" placeholder="Search... (try: sorry, good news, time)" aria-label="Search gallery"></div>
         </div>
 
         <div class="gallery-wrap">
           <div class="gallery-grid" id="galleryGrid">
             <!-- Example folder items. Each folder-card can be clicked to view that folder. -->
             <!-- data-title, data-tags, data-text, data-folder are used by the JS search/filter -->
+			
+			<a href="/image/1" class="folder-card" data-id="1"
+				data-tags="sorry...,for,your,loss,comic,red,reference,simplified">
+				<img 
+				loading="lazy" 
+				alt="Image thumbnail" 
+				src="/image/1/image.png">
+			</a>
+			<a href="/image/2" class="folder-card" data-id="1"
+				data-tags="sorry...,you,re,not,a,wizard,hat,magic,magik,hand">
+				<img 
+				loading="lazy" 
+				alt="Image thumbnail" 
+				src="/image/2/image.png">
+			</a>
+			<a href="/image/3" class="folder-card" data-id="1"
+				data-tags="goood,neeeewwws,yer,an...,hic...,antimeeeme!!,wait...,what,we,talkin','bout,again?,drunk,beer,alcohol,funny">
+				<img 
+				loading="lazy" 
+				alt="Image thumbnail" 
+				src="/image/3/image.png">
+			</a>
+			<a href="/image/4" class="folder-card" data-id="1"
+				data-tags="sorry...,do,you,have,5,five,cents,pennies,to,spare?,poor,homeless,hungry">
+				<img 
+				loading="lazy" 
+				alt="Image thumbnail" 
+				src="/image/4/image.png">
+			</a>
+			<a href="/image/5" class="folder-card" data-id="1"
+				data-tags="sorry...,you,re,your,gonna,going,to,have,a,bad,time,blue,flame,undertale,sans,smile,grin,evil">
+				<img 
+				loading="lazy" 
+				alt="Image thumbnail" 
+				src="/image/5/image.png">
+			</a>
+			<a href="/image/6" class="folder-card" data-id="1"
+				data-tags="ok,idc,who,asked,non,chalant,i,don,t,care">
+				<img 
+				loading="lazy" 
+				alt="Image thumbnail" 
+				src="/image/6/image.png">
+			</a>
+			<a href="/image/7" class="folder-card" data-id="1"
+				data-tags="good,news,you,re,a,great,bot,heart,love,happy">
+				<img 
+				loading="lazy" 
+				alt="Image thumbnail" 
+				src="/image/7/image.png">
+			</a>
+			<a href="/image/8" class="folder-card" data-id="1"
+				data-tags="angry,rage,absolutely,not,go,fuck,yourself,shining,eyes">
+				<img 
+				loading="lazy" 
+				alt="Image thumbnail" 
+				src="/image/8/image.png">
+			</a>
+			<a href="/image/9" class="folder-card" data-id="1"
+				data-tags="new,law,alert,riobox,roblox,confusion,act,lawyer,judge,court,room,hammer,angry,consequences">
+				<img 
+				loading="lazy" 
+				alt="Image thumbnail" 
+				src="/image/9/image.png">
+			</a>
+			<a href="/image/10" class="folder-card" data-id="1"
+				data-tags="happy,birthday,huge,cake,smile,happy,celebration,special,hat">
+				<img 
+				loading="lazy" 
+				alt="Image thumbnail" 
+				src="/image/10/image.png">
+			</a>
+			<a href="/image/11" class="folder-card" data-id="1"
+				data-tags="sorry...,i,gave,you,up,rick,astley,rickroll,funny,meme">
+				<img 
+				loading="lazy" 
+				alt="Image thumbnail" 
+				src="/image/11/image.png">
+			</a>
+			<a href="/image/12" class="folder-card" data-id="1"
+				data-tags="empty,landscape,funny,good,news,i,found,a,group,photo,of,everyone,who,asked,nobody,photo">
+				<img 
+				loading="lazy" 
+				alt="Image thumbnail" 
+				src="/image/12/image.png">
+			</a>
 
-            <div class="folder-card" tabindex="0" role="button" data-folder="Folder 1" data-title="Sunset at the Beach" data-tags="beach,sunset,sea" data-text="welcome to summer" data-thumb="https://i.postimg.cc/T3h61zM1/Placeholder.png">
-              <img loading="lazy" alt="Folder 1 thumbnail" src="https://i.postimg.cc/T3h61zM1/Placeholder.png">
-              <div class="label">Folder 1</div>
+			<!--
+            <div class="folder-card" tabindex="0" role="button" data-folder="Main-Storyline" data-title="Sunset at the Beach" data-tags="beach,sunset,sea" data-text="welcome to summer" data-thumb="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=60">
+              <img loading="lazy" alt="Folder 1 thumbnail" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=60">
+              <div class="label">Main Storyline</div>
             </div>
 
-            <div class="folder-card" tabindex="0" role="button" data-folder="Folder 2" data-title="Mountain Hike" data-tags="mountain,forest,hike" data-text="trail map here" data-thumb="https://i.postimg.cc/T3h61zM1/Placeholder.png">
-              <img loading="lazy" alt="Folder 2 thumbnail" src="https://i.postimg.cc/T3h61zM1/Placeholder.png">
-              <div class="label">Folder 2</div>
+<div class="folder-card" tabindex="0" role="button" data-folder="Chapter-1" data-parent="Main-Storyline" data-title="Sunset at the Beach" data-tags="beach,sunset,sea" data-text="welcome to summer" data-thumb="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=60">
+              <img loading="lazy" alt="Folder 1 thumbnail" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=60">
+              <div class="label">Chapter 1</div>
             </div>
 
-            <div class="folder-card" tabindex="0" role="button" data-folder="Folder 3" data-title="City Nightlife" data-tags="city,night,neon" data-text="open late" data-thumb="https://i.postimg.cc/T3h61zM1/Placeholder.png">
-              <img loading="lazy" alt="Folder 3 thumbnail" src="https://i.postimg.cc/T3h61zM1/Placeholder.png">
-              <div class="label">Folder 3</div>
+<div class="folder-card" tabindex="0" role="button" data-folder="Chapter-2" data-parent="Main-Storyline" data-title="Sunset at the Beach" data-tags="beach,sunset,sea" data-text="welcome to summer" data-thumb="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=60">
+              <img loading="lazy" alt="Folder 1 thumbnail" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=60">
+              <div class="label">Chapter 2</div>
             </div>
 
-            <div class="folder-card" tabindex="0" role="button" data-folder="Folder 4" data-title="Portrait Studio" data-tags="portrait,people,studio" data-text="smile" data-thumb="https://i.postimg.cc/T3h61zM1/Placeholder.png0">
-              <img loading="lazy" alt="Folder 4 thumbnail" src="https://i.postimg.cc/T3h61zM1/Placeholder.png">
-              <div class="label">Folder 4</div>
+            <div class="folder-card" tabindex="0" role="button" data-folder="Mini-Stories" data-title="Mountain Hike" data-tags="mountain,forest,hike" data-text="trail map here" data-thumb="https://i.ibb.co/LDkr4zC0/Zombo-Droid-13102025110538.jpg?auto=format&fit=crop&w=800&q=60">
+              <img loading="lazy" alt="Folder 2 thumbnail" src="https://i.ibb.co/LDkr4zC0/Zombo-Droid-13102025110538.jpg?auto=format&fit=crop&w=800&q=60">
+              <div class="label">Mini Stories</div>
             </div>
 
-            <div class="folder-card" tabindex="0" role="button" data-folder="Folder 5" data-title="Architecture" data-tags="buildings,city,architecture" data-text="" data-thumb="https://i.postimg.cc/T3h61zM1/Placeholder.png">
-              <img loading="lazy" alt="Folder 5 thumbnail" src="https://i.postimg.cc/T3h61zM1/Placeholder.png">
-              <div class="label">Folder 5</div>
+            <div class="folder-card" tabindex="0" role="button" data-folder="Old-Man-Edits" data-title="City Nightlife" data-tags="city,night,neon" data-text="open late" data-thumb="https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=800&q=60">
+              <img loading="lazy" alt="Folder 3 thumbnail" src="https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=800&q=60">
+              <div class="label">Old Man Edits</div>
             </div>
 
-            <div class="folder-card" tabindex="0" role="button" data-folder="Folder 6" data-title="Wildlife" data-tags="animals,wildlife,nature" data-text="lion king" data-thumb="https://i.postimg.cc/T3h61zM1/Placeholder.png">
-              <img loading="lazy" alt="Folder 6 thumbnail" src="https://i.postimg.cc/T3h61zM1/Placeholder.png">
-              <div class="label">Folder 6</div>
+            <div class="folder-card" tabindex="0" role="button" data-folder="Other" data-title="Portrait Studio" data-tags="portrait,people,studio" data-text="smile" data-thumb="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=60">
+              <img loading="lazy" alt="Folder 4 thumbnail" src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=60">
+              <div class="label">Other</div>
             </div>
-
-            <div class="folder-card" tabindex="0" role="button" data-folder="Folder 7" data-title="Food &amp; Drinks" data-tags="food,drinks,cafe" data-text="menu" data-thumb="https://i.postimg.cc/T3h61zM1/Placeholder.png">
-              <img loading="lazy" alt="Folder 7 thumbnail" src="https://i.postimg.cc/T3h61zM1/Placeholder.png">
-              <div class="label">Folder 7</div>
-            </div>
-
-            <div class="folder-card" tabindex="0" role="button" data-folder="Folder 8" data-title="Abstract" data-tags="abstract,colors,shapes" data-text="" data-thumb="https://i.postimg.cc/T3h61zM1/Placeholder.png">
-              <img loading="lazy" alt="Folder 8 thumbnail" src="https://i.postimg.cc/T3h61zM1/Placeholder.png">
-              <div class="label">Folder 8</div>
-            </div>
-
+			-->
           </div>
-          <div class="note">(scrollable if too many folders here)</div>
         </div>
       </div>
 
       <aside class="profile-card" id="rightPanel">
         <div class="profile-avatar">
-          <img id="previewImg" alt="Hover preview" src="https://i.postimg.cc/T3h61zM1/Placeholder.png">
+          <img id="previewImg" alt="Hover preview" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=60">
         </div>
         <div class="profile-title">Folder preview</div>
-        <div style="color:var(--subtle);font-size:.95rem;margin-top:6px">Hover a folder to preview. Click a folder to filter gallery. Use tags below to narrow results.</div>
+        <div style="color:var(--subtle);font-size:.95rem;margin-top:6px">Hover an image to preview. Click an image to view it. Use tags below to narrow results (useless for now).</div>
 
         <div class="tags">
-          <div style="font-weight:700;color:var(--subtle);">Popular tags</div>
+          <div style="font-weight:700;color:var(--subtle);">Selectable tags (useless for now, still developing)</div>
           <div class="tag-row" id="tagRow">
             <!-- tags will be auto-filled from the dataset below -->
           </div>
-
+		<!--
           <div style="font-weight:700;color:var(--subtle);margin-top:8px">Recent thumbnails</div>
           <div class="preview-mini" id="miniPreviews">
-            <!-- small previews will appear here on hover -->
+            (small previews will appear here on hover)
+		-->
           </div>
         </div>
       </aside>
@@ -241,156 +338,119 @@ nav a:hover{color:var(--accent)}
   </div>
 
   <script>
-  // ----------------- Canvas Background (adapted & fixed) -----------------
+  // ----------------- Canvas Background -----------------
   (function(){
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
-
     let width = canvas.width = window.innerWidth;
     let height = canvas.height = window.innerHeight;
 
-    // Cursor
     let mouse = { x: -1000, y: -1000 };
-
-    // Background drift
-    let bgOffsetX = 0;
-    let bgOffsetY = 0;
-
-    // Hex settings
-const r = 50; // radius of each hex
-const hexWidth = 2 * r;
-const hexHeight = Math.sqrt(3) * r;
-const colSpacing = Math.sqrt(3) * r; // horizontal distance between hex centers
-const rowSpacing = 1.5 * r;          // vertical distance between rows
-const strokeColor = 'rgba(57,211,83,0.12)';
-const lineWidth = 1.6;
-
-
-    // Ripples
+    let bgOffsetX = 0, bgOffsetY = 0;
+    const r = 50;
+    const colSpacing = Math.sqrt(3) * r;
+    const rowSpacing = 1.5 * r;
+    const strokeColor = 'rgba(57,211,83,0.12)';
+    const lineWidth = 1.6;
     let ripples = [];
 
-    // Draw single hex
     function drawHex(x, y, r) {
-    ctx.beginPath();
-    for (let i = 0; i < 6; i++) {
-        const angle = Math.PI / 6 + i * Math.PI / 3; // 30° rotation for pointy top
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const angle = Math.PI / 6 + i * Math.PI / 3;
         const px = x + r * Math.cos(angle);
         const py = y + r * Math.sin(angle);
-        if (i === 0) ctx.moveTo(px, py);
-        else ctx.lineTo(px, py);
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = strokeColor;
+      ctx.lineWidth = lineWidth;
+      ctx.stroke();
     }
-    ctx.closePath();
-    ctx.strokeStyle = strokeColor;
-    ctx.lineWidth = lineWidth;
-    ctx.stroke();
-}
 
-
-    // Draw background
     function drawBackground() {
-        ctx.clearRect(0, 0, width, height);
+      ctx.clearRect(0, 0, width, height);
+      const startCol = Math.floor(-bgOffsetX / colSpacing) - 3;
+      const endCol   = Math.ceil((width - bgOffsetX) / colSpacing) + 3;
+      const startRow = Math.floor(-bgOffsetY / rowSpacing) - 3;
+      const endRow   = Math.ceil((height - bgOffsetY) / rowSpacing) + 3;
 
-        // Compute loop bounds based on current offsets
-const startCol = Math.floor(-bgOffsetX / colSpacing) - 3;
-const endCol   = Math.ceil((width - bgOffsetX) / colSpacing) + 3;
+      for (let row = startRow; row < endRow; row++) {
+        for (let col = startCol; col < endCol; col++) {
+          const offsetX = (row % 2) * (colSpacing / 2);
+          const baseX = col * colSpacing + offsetX + bgOffsetX;
+          const baseY = row * rowSpacing + bgOffsetY;
+          let dx = baseX - mouse.x, dy = baseY - mouse.y;
+          let dist = Math.sqrt(dx*dx + dy*dy);
+          let adjX = baseX, adjY = baseY;
 
-const startRow = Math.floor(-bgOffsetY / rowSpacing) - 3;
-const endRow   = Math.ceil((height - bgOffsetY) / rowSpacing) + 3;
-
-
-        for (let row = startRow; row < endRow; row++) {
-    for (let col = startCol; col < endCol; col++) {
-        const offsetX = (row % 2) * (colSpacing / 2); // half-step shift for odd rows
-        const baseX = col * colSpacing + offsetX + bgOffsetX;
-        const baseY = row * rowSpacing + bgOffsetY;
-
-        let dx = baseX - mouse.x;
-        let dy = baseY - mouse.y;
-        let dist = Math.sqrt(dx*dx + dy*dy);
-
-        let adjX = baseX;
-        let adjY = baseY;
-
-        if (dist < 150) {
+          if (dist < 150) {
             const force = (1 - dist/150) * 4;
             adjX += Math.sin(dy/20) * force;
             adjY += Math.cos(dx/20) * force;
-        }
+          }
 
-        ripples.forEach(rp => {
+          ripples.forEach(rp => {
             const dxr = baseX - rp.x;
             const dyr = baseY - rp.y;
             const distR = Math.sqrt(dxr*dxr + dyr*dyr);
             if (distR < 200) {
-                const force = (1 - distR/200) * rp.strength;
-                adjX += Math.sin(dyr/20) * force;
-                adjY += Math.cos(dxr/20) * force;
+              const force = (1 - distR/200) * rp.strength;
+              adjX += Math.sin(dyr/20) * force;
+              adjY += Math.cos(dxr/20) * force;
             }
-        });
+          });
 
-        drawHex(adjX, adjY, r);
+          drawHex(adjX, adjY, r);
+        }
+      }
     }
-}
 
-    }
-
-    // Animate
     function animate() {
-        bgOffsetX += 0.12; // move right
-        bgOffsetY += 0.06;  // move down
-
-        drawBackground();
-
-        ripples = ripples.filter(r => {
-            r.strength -= 0.6;
-            return r.strength > 0;
-        });
-
-        requestAnimationFrame(animate);
+      bgOffsetX += 0.12;
+      bgOffsetY += 0.06;
+      drawBackground();
+      ripples = ripples.filter(r => (r.strength -= 0.6) > 0);
+      requestAnimationFrame(animate);
     }
     animate();
 
-    // Mouse
-    document.addEventListener('mousemove', e => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-    });
-    document.addEventListener('mouseleave', () => {
-        mouse.x = -1000;
-        mouse.y = -1000;
-    });
-
-    // Click ripple
-    document.addEventListener('click', e => {
-        ripples.push({ x: e.clientX, y: e.clientY, strength: 18 });
-    });
-
-    // Resize
+    document.addEventListener('mousemove', e => (mouse = { x: e.clientX, y: e.clientY }));
+    document.addEventListener('mouseleave', () => (mouse = { x: -1000, y: -1000 }));
+    document.addEventListener('click', e => ripples.push({ x: e.clientX, y: e.clientY, strength: 18 }));
     window.addEventListener('resize', () => {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
     });
   })();
 
-  // ----------------- Gallery behavior -----------------
+  // ----------------- Gallery behavior with nested folders -----------------
   (function(){
     const galleryGrid = document.getElementById('galleryGrid');
     const searchInput = document.getElementById('searchInput');
     const previewImg = document.getElementById('previewImg');
     const tagRow = document.getElementById('tagRow');
     const miniPreviews = document.getElementById('miniPreviews');
-
-    // gather all folder cards
     const folders = Array.from(document.querySelectorAll('.folder-card'));
+    let activeFolder = null;
 
-    // build tag set
+    // Show only top-level folders initially
+    function showTopLevel() {
+      folders.forEach(f => {
+        f.style.display = !f.dataset.parent ? '' : 'none';
+      });
+    }
+
+    showTopLevel();
+
+    // Build tag set
     const tagSet = new Set();
     folders.forEach(f => {
       const t = (f.dataset.tags||'').split(',').map(s=>s.trim()).filter(Boolean);
       t.forEach(x=>tagSet.add(x));
     });
 
-    // populate tags
+    // Populate tags
     tagSet.forEach(t => {
       const btn = document.createElement('button');
       btn.className = 'tag';
@@ -404,74 +464,37 @@ const endRow   = Math.ceil((height - bgOffsetY) / rowSpacing) + 3;
       tagRow.appendChild(btn);
     });
 
-    // basic search: split tokens and match against title, tags, text
-    function applyFilters(){
-      const q = searchInput.value.trim().toLowerCase();
-      const selectedTags = Array.from(document.querySelectorAll('.tag.selected')).map(b=>b.dataset.tag.toLowerCase());
+    function applyFilters() {
+  const q = searchInput.value.trim().toLowerCase();
+  const selectedTags = Array.from(document.querySelectorAll('.tag.selected')).map(b => b.dataset.tag.toLowerCase());
+  const tokens = q.length ? q.split(/\s+/).map(s => s.trim()).filter(Boolean) : [];
 
-      const tokens = q.length ? q.split(/\s+/).map(s=>s.trim()).filter(Boolean) : [];
+  folders.forEach(card => {
+    const title = (card.dataset.title || '').toLowerCase();
+    const tags = (card.dataset.tags || '').toLowerCase().split(',').map(t => t.trim());
+    const text = (card.dataset.text || '').toLowerCase();
+    const folder = (card.dataset.folder || '').toLowerCase();
+    const combined = `${title} ${tags.join(' ')} ${text} ${folder}`;
 
-      folders.forEach(card => {
-        const title = (card.dataset.title||'').toLowerCase();
-        const tags = (card.dataset.tags||'').toLowerCase();
-        const text = (card.dataset.text||'').toLowerCase();
-        const folder = (card.dataset.folder||'').toLowerCase();
+    const tokensOK = tokens.every(tok => combined.includes(tok));
+    const tagsOK = selectedTags.every(t => tags.includes(t));
 
-        // check tokens: all tokens must appear in one of the fields
-        let tokensOK = tokens.every(tok => (title+" "+tags+" "+text+" "+folder).includes(tok));
+    // Determine if this folder should be visible based on hierarchy
+    const parent = card.dataset.parent || null;
+    const inActive = !activeFolder 
+      ? !parent // only top-level
+      : (card.dataset.folder === activeFolder || parent === activeFolder);
 
-        // check tag filters: if any selected tags, the card must include all selected tags
-        let tagsOK = selectedTags.every(t => tags.split(',').includes(t));
+    // Only show items that both match filters and are in the current view
+    card.style.display = (tokensOK && tagsOK && inActive) ? '' : 'none';
+  });
 
-        card.style.display = (tokensOK && tagsOK) ? '' : 'none';
-      });
-    }
+  updateMiniPreviews();
+}
 
     searchInput.addEventListener('input', applyFilters);
 
-    // folder click -> filter to that folder only (toggle)
-    let activeFolder = null;
-    folders.forEach(card => {
-      card.addEventListener('click', () => {
-        const folderName = card.dataset.folder;
-        if (activeFolder === folderName) {
-          activeFolder = null;
-          // show all
-          folders.forEach(c=>c.style.display='');
-        } else {
-          activeFolder = folderName;
-          folders.forEach(c=>{
-            c.style.display = (c.dataset.folder === folderName) ? '' : 'none';
-          });
-        }
-        // update right panel mini previews
-        updateMiniPreviews();
-      });
-
-      // hover preview
-      card.addEventListener('mouseenter', () => {
-        const src = card.dataset.thumb || card.querySelector('img')?.src;
-        if (src) previewImg.src = src;
-
-        // populate mini previews with images from this folder (demo uses the same thumb)
-        miniPreviews.innerHTML = '';
-        for (let i=0;i<6;i++){
-          const im = document.createElement('img');
-          im.src = src;
-          im.alt = folderName + ' preview ' + i;
-          miniPreviews.appendChild(im);
-        }
-      });
-    });
-
-    // back button behavior
-    document.getElementById('backToPrev').addEventListener('click', ()=>{
-      // in a static site this might just go to index or history.back()
-      if (history.length>1) history.back();
-    });
-
-    // fill the initial mini previews (recent)
-    function updateMiniPreviews(){
+    function updateMiniPreviews() {
       const visible = folders.filter(f=>f.style.display !== 'none');
       miniPreviews.innerHTML = '';
       visible.slice(0,8).forEach(f => {
@@ -481,23 +504,88 @@ const endRow   = Math.ceil((height - bgOffsetY) / rowSpacing) + 3;
         miniPreviews.appendChild(im);
       });
     }
-    updateMiniPreviews();
 
-    // keyboard accessibility: Enter on folder triggers click
-    folders.forEach(f => f.addEventListener('keydown', e => { if (e.key === 'Enter') f.click(); }));
+    // Initialize view from URL hash
+    function updateFromHash() {
+      const hash = decodeURIComponent(location.hash.replace('#',''));
+      if(!hash) {
+        activeFolder = null;
+        showTopLevel();
+      } else {
+        activeFolder = hash;
+        folders.forEach(f => {
+          const parent = f.dataset.parent || null;
+          f.style.display = (f.dataset.folder === hash || parent === hash) ? '' : 'none';
+        });
+      }
+      updateMiniPreviews();
+    }
+
+    updateFromHash();
+
+    window.addEventListener('popstate', updateFromHash);
+    window.addEventListener('hashchange', updateFromHash);
+
+    // Folder click handler
+    folders.forEach(card => {
+      card.addEventListener('click', () => {
+        const folderName = card.dataset.folder;
+
+        if(activeFolder === folderName) {
+          activeFolder = card.dataset.parent || null;
+        } else {
+          activeFolder = folderName;
+        }
+
+        folders.forEach(f => {
+          const parent = f.dataset.parent || null;
+          if(!activeFolder) {
+            f.style.display = !f.dataset.parent ? '' : 'none';
+          } else {
+            f.style.display = (f.dataset.folder === activeFolder || parent === activeFolder) ? '' : 'none';
+          }
+        });
+
+        // Update URL hash
+        if(activeFolder) {
+          history.pushState({folder: activeFolder}, '', `#${encodeURIComponent(activeFolder)}`);
+        } else {
+          history.pushState({folder:null}, '', location.pathname);
+        }
+
+        updateMiniPreviews();
+      });
+
+      // Hover preview
+      card.addEventListener('mouseenter', () => {
+        const src = card.dataset.thumb || card.querySelector('img')?.src;
+        if(src) previewImg.src = src;
+        miniPreviews.innerHTML = '';
+        for(let i=0;i<6;i++){
+          const im = document.createElement('img');
+          im.src = src;
+          im.alt = card.dataset.folder + ' preview ' + i;
+          miniPreviews.appendChild(im);
+        }
+      });
+
+      // Keyboard accessibility
+      card.addEventListener('keydown', e => { if(e.key==='Enter') card.click(); });
+    });
+
+    document.getElementById('backToPrev')?.addEventListener('click', ()=>history.back());
+
+    // Inject icons
+    document.querySelectorAll('[data-icon]').forEach(el => {
+      const url = el.dataset.icon;
+      if(url && url.startsWith('data:')){
+        try{ el.innerHTML = decodeURIComponent(url.split(',')[1]); }catch(e){}
+        return;
+      }
+      fetch(url).then(res=>res.text()).then(svg=>{ el.innerHTML = svg }).catch(()=>{});
+    });
 
   })();
-
-  // small helper to inject data-icon svgs
-  document.querySelectorAll('[data-icon]').forEach(el => {
-    const url = el.dataset.icon;
-    // if the URL is a data: URL, decode it directly
-    if (url && url.startsWith('data:')){
-      try{ el.innerHTML = decodeURIComponent(url.split(',')[1]); }catch(e){ /* ignore */ }
-      return;
-    }
-    fetch(url).then(res=>res.text()).then(svg=>{ el.innerHTML = svg; }).catch(()=>{});
-  });
-  </script>
+</script>
 </body>
 </html>
