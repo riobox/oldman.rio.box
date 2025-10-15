@@ -194,84 +194,96 @@ nav a:hover{color:var(--accent)}
             <!-- data-title, data-tags, data-text, data-folder are used by the JS search/filter -->
 			
 			<a href="/image/1" class="folder-card" data-id="1"
-				data-tags="sorry...,for,your,loss,comic,red,reference,simplified">
+				data-tags="sorry...,for,your,loss,comic,red,reference,simplified"
+				data-thumb="/image/1/image.png">
 				<img 
 				loading="lazy" 
 				alt="Image thumbnail" 
 				src="/image/1/image.png">
 			</a>
 			<a href="/image/2" class="folder-card" data-id="2"
-				data-tags="sorry...,you,re,not,a,wizard,hat,magic,magik,hand">
+				data-tags="sorry...,you,re,not,a,wizard,hat,magic,magik,hand"
+				data-thumb="/image/2/image.png">
 				<img 
 				loading="lazy" 
 				alt="Image thumbnail" 
 				src="/image/2/image.png">
 			</a>
 			<a href="/image/3" class="folder-card" data-id="3"
-				data-tags="goood,neeeewwws,yer,an...,hic...,antimeeeme!!,wait...,what,we,talkin','bout,again?,drunk,beer,alcohol,funny">
+				data-tags="goood,neeeewwws,yer,an...,hic...,antimeeeme!!,wait...,what,we,talkin','bout,again?,drunk,beer,alcohol,funny"
+				data-thumb="/image/3/image.png">
 				<img 
 				loading="lazy" 
 				alt="Image thumbnail" 
 				src="/image/3/image.png">
 			</a>
 			<a href="/image/4" class="folder-card" data-id="4"
-				data-tags="sorry...,do,you,have,5,five,cents,pennies,to,spare?,poor,homeless,hungry">
+				data-tags="sorry...,do,you,have,5,five,cents,pennies,to,spare?,poor,homeless,hungry"
+				data-thumb="/image/4/image.png">
 				<img 
 				loading="lazy" 
 				alt="Image thumbnail" 
 				src="/image/4/image.png">
 			</a>
 			<a href="/image/5" class="folder-card" data-id="5"
-				data-tags="sorry...,you,re,your,gonna,going,to,have,a,bad,time,blue,flame,undertale,sans,smile,grin,evil">
+				data-tags="sorry...,you,re,your,gonna,going,to,have,a,bad,time,blue,flame,undertale,sans,smile,grin,evil"
+				data-thumb="/image/5/image.png">
 				<img 
 				loading="lazy" 
 				alt="Image thumbnail" 
 				src="/image/5/image.png">
 			</a>
 			<a href="/image/6" class="folder-card" data-id="6"
-				data-tags="ok,idc,who,asked,non,chalant,i,don,t,care">
+				data-tags="ok,idc,who,asked,non,chalant,i,don,t,care"
+				data-thumb="/image/6/image.png">
 				<img 
 				loading="lazy" 
 				alt="Image thumbnail" 
 				src="/image/6/image.png">
 			</a>
 			<a href="/image/7" class="folder-card" data-id="7"
-				data-tags="good,news,you,re,a,great,bot,heart,love,happy">
+				data-tags="good,news,you,re,a,great,bot,heart,love,happy"
+				data-thumb="/image/7/image.png">
 				<img 
 				loading="lazy" 
 				alt="Image thumbnail" 
 				src="/image/7/image.png">
 			</a>
 			<a href="/image/8" class="folder-card" data-id="8"
-				data-tags="angry,rage,absolutely,not,go,fuck,yourself,shining,eyes">
+				data-tags="angry,rage,absolutely,not,go,fuck,yourself,shining,eyes"
+				data-thumb="/image/8/image.png">
 				<img 
 				loading="lazy" 
 				alt="Image thumbnail" 
 				src="/image/8/image.png">
 			</a>
 			<a href="/image/9" class="folder-card" data-id="9"
-				data-tags="new,law,alert,riobox,roblox,confusion,act,lawyer,judge,court,room,hammer,angry,consequences">
+				data-tags="new,law,alert,riobox,roblox,confusion,act,lawyer,judge,court,room,hammer,angry,consequences"
+				data-thumb="/image/9/image.png">
 				<img 
 				loading="lazy" 
 				alt="Image thumbnail" 
 				src="/image/9/image.png">
 			</a>
 			<a href="/image/10" class="folder-card" data-id="10"
-				data-tags="happy,birthday,huge,cake,smile,happy,celebration,special,hat">
+				data-tags="happy,birthday,huge,cake,smile,happy,celebration,special,hat"
+				data-thumb="/image/10/image.png">
 				<img 
 				loading="lazy" 
 				alt="Image thumbnail" 
 				src="/image/10/image.png">
 			</a>
 			<a href="/image/11" class="folder-card" data-id="11"
-				data-tags="sorry...,i,gave,you,up,rick,astley,rickroll,funny,meme">
+				data-tags="sorry...,i,gave,you,up,rick,astley,rickroll,funny,meme"
+				data-thumb="/image/11/image.png">
 				<img 
 				loading="lazy" 
 				alt="Image thumbnail" 
 				src="/image/11/image.png">
 			</a>
 			<a href="/image/12" class="folder-card" data-id="12"
-				data-tags="empty,landscape,funny,good,news,i,found,a,group,photo,of,everyone,who,asked,nobody,photo">
+				data-tags="empty,landscape,funny,good,news,i,found,a,group,photo,of,everyone,who,asked,nobody,photo"
+				data-thumb="/image/12/image.png">
 				<img 
 				loading="lazy" 
 				alt="Image thumbnail" 
@@ -558,16 +570,10 @@ nav a:hover{color:var(--accent)}
 
       // Hover preview
       card.addEventListener('mouseenter', () => {
-        const src = card.dataset.thumb || card.querySelector('img')?.src;
-        if(src) previewImg.src = src;
-        miniPreviews.innerHTML = '';
-        for(let i=0;i<6;i++){
-          const im = document.createElement('img');
-          im.src = src;
-          im.alt = card.dataset.folder + ' preview ' + i;
-          miniPreviews.appendChild(im);
-        }
-      });
+  const img = card.querySelector('img');
+  if(img) previewImg.src = img.src; // always take the actual image
+});
+
 
       // Keyboard accessibility
       card.addEventListener('keydown', e => { if(e.key==='Enter') card.click(); });
