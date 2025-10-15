@@ -570,8 +570,8 @@ nav a:hover{color:var(--accent)}
 
       // Hover preview
       card.addEventListener('mouseenter', () => {
-  const img = card.querySelector('img');
-  if(img) previewImg.src = img.src; // always take the actual image
+  const thumb = card.dataset.thumb || card.querySelector('img')?.src;
+  if(thumb) previewImg.src = thumb;
 });
 
 
