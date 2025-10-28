@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Front Gallery — Sample</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+:root{
+  --bg-color:#181820;
+  --text-color:#fff;
+  --accent:#39d353;
+  --subtle:#b0b0b0;
+  --card-bg: rgba(8,8,10,0.55);
+  --card-border: rgba(57,211,83,0.18);
+  --glass-blur: 6px;
+  --card-radius:18px;
+}
+
+/* Reset + base */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Roboto Mono', monospace;
+  color:var(--text-color);
+  background: linear-gradient(to bottom, #000000, var(--bg-color));
+  overflow-x:hidden;
+  line-height:1.5;
+  position:relative;
+}
+
+/* Header + hero (kept mostly from original) */
+header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:20px 50px; z-index:3; position:relative;
+}
+header h1{font-weight:700;font-size:1.4rem;letter-spacing:1px}
+nav a{color:var(--text-color);text-decoration:none;margin-left:22px;font-weight:500;transition:color .2s}
+nav a:hover{color:var(--accent)}
+
+/* Hero */
+.hero{
+  text-align:center;padding:28px 20px 16px;z-index:2;position:relative;
+}
+.hero h2{font-size:1.6rem;font-weight:700;margin-bottom:6px}
+.hero h2 .accent{color:var(--accent)}
+.hero p{color:var(--subtle);font-size:1.05rem;margin-bottom:8px}
+.hero button{
+  background:transparent;border:2px solid var(--accent);color:var(--accent);
+  padding:8px 16px;font-weight:700;border-radius:6px;cursor:pointer;transition:all .2s
+}
+.hero button:hover{background:var(--accent);color:var(--bg-color)}
+
+/* Canvas sits behind everything */
+#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none}
+
+/* Page layout */
+.page-wrap{max-width:1400px;margin:18px auto;padding:12px 18px;position:relative;z-index:2}
+.content-area{display:grid;grid-template-columns:1fr 360px;gap:18px;align-items:start}
+
+/* Left panel: search + grid */
+.tools{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.back-btn{display:inline-flex;align-items:center;justify-content:center;width:52px;height:44px;border-radius:10px;border:1.6px solid var(--card-border);background:var(--card-bg);cursor:pointer}
+.search{flex:1}
+.search input{width:100%;padding:12px 14px;border-radius:8px;border:1.5px solid var(--card-border);background:transparent;color:var(--text-color);font-size:1rem}
+
+.gallery-wrap{background:transparent;padding:6px}
+.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:start}
+.folder-card{
+  height:200px;background:var(--card-bg);border-radius:12px;border:1.6px solid var(--card-border);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;padding:12px;
+}
+.folder-card img{max-width:100%;max-height:100%;object-fit:cover;border-radius:8px;opacity:0.98}
+.folder-card .label{position:absolute;left:18px;bottom:16px;font-size:1.1rem;font-weight:700;color:var(--text-color);text-shadow:0 2px 8px rgba(0,0,0,0.6)}
+
+/* Footer note about scroll */
+.gallery-wrap .note{color:var(--subtle);font-size:.95rem;text-align:center;margin-top:8px}
+
+/* ---------- PROFILE CARD (right side) ---------- */
+.profile-card{
+  position: sticky;
+  top: 33px;
+  width: 510px;
+  max-width: 54vw;
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  border: 1.5px solid var(--card-border);
+  padding: 18px;
+  z-index: 3;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  backdrop-filter: blur(var(--glass-blur));
+  color:var(--text-color);
+}
+
+/* Rounded top highlight (like your image) */
+.profile-avatar{
+  width: 220px;
+  height: 220px;
+  border-radius: 1998px;
+  margin: 0 auto 24px;
+  display:block;
+  overflow:hidden;
+  border: 6px solid rgba(57,211,83,0.98);
+  padding:8px;
+  background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45));
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6), 0 0 14px rgba(57,211,83,0.04) inset;
+}
+.profile-avatar img{width:100%;height:100%;object-fit:cover;display:block;border-radius:999px}
+
+/* small heading inside profile card */
+.profile-title{text-align:center;margin:8px 0 6px;font-weight:700}
+
+/* tags area */
+.tags{display:flex;flex-direction:column;gap:8px;margin-top:12px;max-height:330px;overflow:auto;padding-right:6px}
+.tag-row{display:flex;flex-wrap:wrap;gap:8px}
+.tag{padding:8px 10px;border-radius:8px;border:1.2px solid var(--card-border);background:transparent;color:var(--subtle);cursor:pointer;font-weight:600}
+.tag.selected{background:rgba(57,211,83,0.06);color:var(--accent);border-color:rgba(57,211,83,0.3)}
+
+/* small preview grid for folder thumbnails inside profile card */
+.preview-mini{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.preview-mini img{width:100%;height:48px;object-fit:cover;border-radius:4px;border:1px solid rgba(255,255,255,0.04)}
+
+/* tiny helpers */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* Hover state */
+.folder-card:hover{transform:translateY(-6px);box-shadow:0 12px 28px rgba(0,0,0,0.6)}
+
+/* Responsive: stack on small screens */
+@media (max-width:1000px){
+  .content-area{grid-template-columns:1fr 320px}
+  .gallery-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:780px){
+  .content-area{grid-template-columns:1fr}
+  .profile-card{position:static;transform:none;margin:18px auto;width:92%;max-width:520px}
+  header{padding:16px 20px}
+  .hero{padding:20px 14px 12px}
+  .gallery-grid{grid-template-columns:repeat(2,1fr)}
+}
+  </style>
+</head>
+<body>
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <header>
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="back-btn" id="backBtn" title="Back" aria-label="Back" data-icon="data:svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='20' height='20'%3E%3Cpath d='M15 6l-6 6 6 6' stroke='%2339d353' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E"></button>
+      <h1>View Old Man Edits</h1>
+    </div>
+    <nav aria-label="top navigation">
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </nav>
+  </header>
+
+  <div class="hero page-wrap">
+    <div class="hero-inner">
+      <h2>Explore the <span class="accent">Graveyard</span></h2>
+      <p class="sub">Search for overused templates by text inside the picture, keywords or tags. Click a template to view it.</p>
+    </div>
+
+    <div class="content-area">
+      <div>
+        <div class="tools">
+          <div class="back-btn" id="backToPrev" title="Go back">◀</div>
+          <div class="search"><input id="searchInput" placeholder="Search... (try: beach, portrait, text:welcome)" aria-label="Search gallery"></div>
+        </div>
+
+        <div class="gallery-wrap">
+          <div class="gallery-grid" id="galleryGrid">
+            <!-- Example folder items. Each folder-card can be clicked to view that folder. -->
+            <!-- data-title, data-tags, data-text, data-folder are used by the JS search/filter -->
+
+            <a href="/graveyard/image/1" class="folder-card" data-id="1" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/1/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/1/image.png">
+                                <div class="label">Surprised Squidward</div>
+</a>
+
+<a href="/graveyard/image/2" class="folder-card" data-id="2" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/2/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/2/image.png">
+                                <div class="label">Kid Named X</div>
+</a>
+
+<a href="/graveyard/image/3" class="folder-card" data-id="3" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/3/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/2/image.png">
+                                <div class="label">Actual Superheroes</div>
+</a>
+<a href="/graveyard/image/4" class="folder-card" data-id="4" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/4/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/4/image.png">
+                                <div class="label">That's Racist!</div>
+</a>
+
+<a href="/graveyard/image/5" class="folder-card" data-id="5" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/5/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/5/image.png">
+                                <div class="label">Hard to Swallow Pills</div>
+</a>
+
+<a href="/graveyard/image/6" class="folder-card" data-id="6" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/6/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/6/image.png">
+                                <div class="label">Jarvis Commands</div>
+</a>
+
+<a href="/graveyard/image/7" class="folder-card" data-id="7" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/7/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/7/image.png">
+                                <div class="label">SpongeBob Burning Paper</div>
+</a>
+
+<a href="/graveyard/image/8" class="folder-card" data-id="8" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/8/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/8/image.png">
+                                <div class="label">You Can Swipe Cat</div>
+</a>
+
+<a href="/graveyard/image/9" class="folder-card" data-id="9" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/9/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/9/image.png">
+                                <div class="label">Drakeposting</div>
+</a>
+
+<a href="/graveyard/image/10" class="folder-card" data-id="10" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/10/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/10/image.png">
+                                <div class="label">Are You Going To Sleep?</div>
+</a>
+
+<a href="/graveyard/image/11" class="folder-card" data-id="11" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/11/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/11/image.png">
+                                <div class="label">Cat With Heterochromia</div>
+</a>
+
+<a href="/graveyard/image/12" class="folder-card" data-id="12" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/12/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/12/image.png">
+                                <div class="label">Genie Rules</div>
+</a>
+
+<a href="/graveyard/image/13" class="folder-card" data-id="13" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/13/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/13/image.png">
+                                <div class="label">The Scroll of Truth</div>
+</a>
+
+<a href="/graveyard/image/14" class="folder-card" data-id="14" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/14/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/14/image.png">
+                                <div class="label">They're The Same Picture</div>
+</a>
+
+<a href="/graveyard/image/15" class="folder-card" data-id="15" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/15/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/15/image.png">
+                                <div class="label">Awesome Lesbian Couple</div>
+</a>
+
+<a href="/graveyard/image/16" class="folder-card" data-id="16" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/16/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/16/image.png">
+                                <div class="label">Draw 25</div>
+</a>
+
+<a href="/graveyard/image/17" class="folder-card" data-id="17" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/17/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/17/image.png">
+                                <div class="label">Accidental Bump</div>
+</a>
+
+<a href="/graveyard/image/18" class="folder-card" data-id="18" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/18/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/18/image.png">
+                                <div class="label">Ew, I Stepped In Shit</div>
+</a>
+
+<a href="/graveyard/image/19" class="folder-card" data-id="19" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/19/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/19/image.png">
+                                <div class="label">Do Men Even Have Feelings?</div>
+</a>
+
+<a href="/graveyard/image/20" class="folder-card" data-id="20" data-tags="sorry...,for,your,loss,comic,red,reference,simplified" data-thumb="/graveyard/image/20/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/20/image.png">
+                                <div class="label">We Share a Common Interest</div>
+</a>
+
+<a href="/graveyard/image/21" class="folder-card" data-id="21" data-tags="uncanny,mr,incredible,dark,black,and,white,zero,contrast,white,happy,blonde,the,teachers,copy,what,students,get" data-thumb="/graveyard/image/21/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/21/image.png">
+                                <div class="label">Uncanny Mr Incredible</div>
+</a>
+
+<a href="/graveyard/image/22" class="folder-card" data-id="22" data-tags="discovery,misgendering,accident,ancient,history,bones,skeleton,fossil,millenia,hundreds,years,past,biology,earth,trans,women,are,women,1000,one,thousand,later:,male,skeleton,approximately,25,twenty-,five,old.,archeologist,archeaologist" data-thumb="/graveyard/image/22/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/22/image.png">
+                                <div class="label">Trans Women Archeologist</div>
+</a>
+
+<a href="/graveyard/image/23" class="folder-card" data-id="23" data-tags="long,bacon,store,relationship,lesbians,love,romantic,thanks,for,keeping,me,warm,babe,I,know,you,get,cold,in,the,winter,where,did,get,such,a,blonde,brunette,blue,red,season,cold,warmth" data-thumb="/graveyard/image/23/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/23/image.png">
+                                <div class="label">Long Bacon Store</div>
+</a>
+
+<a href="/graveyard/image/24" class="folder-card" data-id="24" data-tags="my,deaf,girlfriend,before,and,after,being,told,she's,beautiful,emotionless,indifferent,no,reaction,unable,to,hear,sign,language,woman" data-thumb="/graveyard/image/24/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/24/image.png">
+                                <div class="label">Deaf Girlfriend</div>
+</a>
+
+<a href="/graveyard/image/25" class="folder-card" data-id="25" data-tags="i,love,u,you,im,i'm,gay,homossexual,same,sex,attraction,lgbtq+,too,guy,sigma,brunette,blonde,woman,women,man,differences" data-thumb="/graveyard/image/25/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/25/image.png">
+                                <div class="label">I Love U Im Gay</div>
+</a>
+
+<a href="/graveyard/image/26" class="folder-card" data-id="26" data-tags="apple,orange,juice,beverages,drinks,ingredients,tutorial,how,to,make,consumable,cold,ice,glass" data-thumb="/graveyard/image/26/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/26/image.png">
+                                <div class="label">Apple Orange Juice</div>
+</a>
+
+<a href="/graveyard/image/27" class="folder-card" data-id="27" data-tags="know,the,work,rules,jimmy,susan,lookin',good,awww,you're,are,sweet,heart,love,kind,appropriate,office,work,sunny,street,computer,blonde,red,fat,ugly,hello,human,resources?!,panic,telephone,call,hr,inappropriate" data-thumb="/graveyard/image/27/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/27/image.png">
+                                <div class="label">Know The Work Rules</div>
+</a>
+
+<a href="/graveyard/image/28" class="folder-card" data-id="28" data-tags="take,your,age,add,21,subtract,9,subtract,10,that's,your,age,guy,adult,math,expert,smart,trick,calculation,business,anton,castillo,far,cry,6" data-thumb="/graveyard/image/28/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/28/image.png">
+                                <div class="label">Take Your Age</div>
+</a>
+
+<a href="/graveyard/image/29" class="folder-card" data-id="29" data-tags="what,gives,people,feelings,of,power,statistics,bars,race,low,medium,high,green,blue,red,money,status,a,cat,choosing,to,cuddle,you,over,anyone,else,in,the,room.,any-,@iamnotanartist_" data-thumb="/graveyard/image/29/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/29/image.png">
+                                <div class="label">What Gives People Feelings of Power</div>
+</a>
+
+<a href="/graveyard/image/30" class="folder-card" data-id="30" data-tags="shen,comix,very,strong,buffed,gym,bro,academy,fitness,exercise,training,muscular,six,pack,surprised,shocked,wow!,how,did,you,get,like,that?,everytime,i'm,am,horny,...,i,do,one,1,push-up,push,up,jesus,christ." data-thumb="/graveyard/image/30/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/30/image.png">
+                                <div class="label">I Do One Push-up</div>
+</a>
+
+<a href="/graveyard/image/31" class="folder-card" data-id="31" data-tags="literal,literature,literacy,words,literally,fiction,vampire,dracula,in,the,movies,book,black,and,white" data-thumb="/graveyard/image/31/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/31/image.png">
+                                <div class="label">Dracula In The Movies Book</div>
+</a>
+
+<a href="/graveyard/image/32" class="folder-card" data-id="32" data-tags="literal,literature,literacy,words,literally,fiction,magician,student,learning,harry,potter,in,the,movies:,books:,colorful" data-thumb="/graveyard/image/32/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/32/image.png">
+                                <div class="label">Harry Potter In The Movies Book</div>
+</a>
+
+<a href="/graveyard/image/33" class="folder-card" data-id="33" data-tags="against,the,law,taboo,dark,firearm,attempted,murder,charges,minion,fiction,smug,glasses,if,being,cool,was,illegal,I'd,would,be,a,criminal.,not,because,i'm,am,cool,but,because,i,shot,my,wife.,yellow" data-thumb="/graveyard/image/33/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/33/image.png">
+                                <div class="label">If Being Cool Was Illegal</div>
+</a>
+
+<a href="/graveyard/image/34" class="folder-card" data-id="34" data-tags="cheating,thoughts,imagination,what,if,jealous,couple,in,bed,angry,concerned,curious,thoughtful,her:,i,bet,he's,is,thinking,about,other,women,woman,him:,when,colin,kaepernick,going,to,get,signed?,wondering,brunette,man" data-thumb="/graveyard/image/34/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/34/image.png">
+                                <div class="label">I Bet He's Thinking About Other Women</div>
+</a>
+
+<a href="/graveyard/image/35" class="folder-card" data-id="35" data-tags="gary,varve,social,media,commentary,perspective,going,back,in,time,controversial,political,shocked,new,year,surprised,twitter,x,banned,trump's,account,and,google,suspended,parler...,what's,going,on?,december,2020,january,1984,calendary,ripped,ripping,off,paper,phone,coffee,glass,brunette" data-thumb="/graveyard/image/35/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/35/image.png">
+                                <div class="label">Living in 1984</div>
+</a>
+
+<a href="/graveyard/image/36" class="folder-card" data-id="36" data-tags="the,punchline,is,porn,it,will,always,be,sex,egg,sperm,my,plushie,outside,inside" data-thumb="/graveyard/image/36/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/36/image.png">
+                                <div class="label">My Plushie Outside Inside</div>
+</a>
+
+<a href="/graveyard/image/37" class="folder-card" data-id="37" data-tags="tutorial,how,to,putting,on,clown,make,up,look,like,a,justifying,countries,cuba,venezuela,soviet,union,north,korea,step,1,2,3,4,done,smiffysfancydress" data-thumb="/graveyard/image/37/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/37/image.png">
+                                <div class="label">Putting on Clown Makeup</div>
+</a>
+
+<a href="/graveyard/image/38" class="folder-card" data-id="38" data-tags="giancarlo,esposito,serious,business,black,tying,you,jerk,off,to,pornography,i,jerk,off,to,abstract,concepts,such,as,money,and,success,and,power,we're,are,not,the,same,watermark" data-thumb="/graveyard/image/38/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/38/image.png">
+                                <div class="label">We Are Not the Same</div>
+</a>
+
+<a href="/graveyard/image/39" class="folder-card" data-id="39" data-tags="jets,omni-,man,invincible,flying,cheating,cheats,easier,path,look,what,they,need,to,mimic,a,fraction,of,our,power" data-thumb="/graveyard/image/39/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/39/image.png">
+                                <div class="label">Look What They Need</div>
+</a>
+
+<a href="/graveyard/image/40" class="folder-card" data-id="40" data-tags="woman,women,standing,go,going,mango,fruit,pun" data-thumb="/graveyard/image/40/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/40/image.png">
+                                <div class="label">Woman Man Stand Go</div>
+</a>
+
+<a href="/graveyard/image/41" class="folder-card" data-id="41" data-tags="boys,girls,when,they,get,a,compliment,grateful,thank,you,woman,blonde,topographical,map,of,brazil" data-thumb="/graveyard/image/41/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/41/image.png">
+                                <div class="label">Topographical Map of Brazil</div>
+</a>
+
+<a href="/graveyard/image/42" class="folder-card" data-id="42" data-tags="scrampu.,com,dark,black,background,growing,up,lesson,marks,childhood,is,when,you're,are,a,child,idolize,joker.,adulthood,an,adult,realize,that,batman,makes,more,sense." data-thumb="/graveyard/image/42/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/42/image.png">
+                                <div class="label">Childhood Adulthood Is When</div>
+</a>
+
+<a href="/graveyard/image/43" class="folder-card" data-id="43" data-tags="future,idealization,otopia,technical,society,if,67,77,+,33,=,100,plus,was,equal,to,mathematics,thinking,genius,smart" data-thumb="/graveyard/image/43/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/43/image.png">
+                                <div class="label">Society If 67+33=100</div>
+</a>
+
+<a href="/graveyard/image/44" class="folder-card" data-id="44" data-tags="milk,ape,money,chocolate,dark,black,gorilla,melting,kitchen,cooking,listen,kid,i,don't,not,have,much,time,left,just,know,that,the,only,way,to,is...,too,late,we,will,never,know" data-thumb="/graveyard/image/44/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/44/image.png">
+                                <div class="label">Chocolate Gorilla Melting</div>
+</a>
+
+<a href="/graveyard/image/45" class="folder-card" data-id="45" data-tags="if,those,kids,could,read,they'd,would,be,very,upset,principal,moss,king,of,the,hill,protest,local,school,bobby,sign,paper,window,children,education,repent,sinner,you're,are,all,going,to,hell!" data-thumb="/graveyard/image/45/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/45/image.png">
+                                <div class="label">If Those Kids Could Read</div>
+</a>
+
+          </div>
+        </div>
+      </div>
+
+      <aside class="profile-card" id="rightPanel">
+        <div class="profile-avatar">
+          <img id="previewImg" alt="Hover preview" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=60">
+        </div>
+        <div class="profile-title">Template preview</div>
+        <div style="color:var(--subtle);font-size:.95rem;margin-top:6px">Hover a template to preview. Click a template to view it.</div>
+
+        <div class="tags">
+          <div style="font-weight:700;color:var(--subtle);display:none;">Popular tags</div>
+          <div class="tag-row" id="tagRow" style="display:none;">
+            <!-- tags will be auto-filled from the dataset below -->
+          </div>
+
+          <div style="font-weight:700;color:var(--subtle);margin-top:8px;display:none">Recent thumbnails</div>
+          <div class="preview-mini" id="miniPreviews" style="display:none;">
+            <!-- small previews will appear here on hover -->
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <script>
+  // ----------------- Canvas Background -----------------
+  (function(){
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    let mouse = { x: -1000, y: -1000 };
+    let bgOffsetX = 0, bgOffsetY = 0;
+    const r = 50;
+    const colSpacing = Math.sqrt(3) * r;
+    const rowSpacing = 1.5 * r;
+    const strokeColor = 'rgba(57,211,83,0.12)';
+    const lineWidth = 1.6;
+    let ripples = [];
+
+    function drawHex(x, y, r) {
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const angle = Math.PI / 6 + i * Math.PI / 3;
+        const px = x + r * Math.cos(angle);
+        const py = y + r * Math.sin(angle);
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = strokeColor;
+      ctx.lineWidth = lineWidth;
+      ctx.stroke();
+    }
+
+    function drawBackground() {
+      ctx.clearRect(0, 0, width, height);
+      const startCol = Math.floor(-bgOffsetX / colSpacing) - 3;
+      const endCol   = Math.ceil((width - bgOffsetX) / colSpacing) + 3;
+      const startRow = Math.floor(-bgOffsetY / rowSpacing) - 3;
+      const endRow   = Math.ceil((height - bgOffsetY) / rowSpacing) + 3;
+
+      for (let row = startRow; row < endRow; row++) {
+        for (let col = startCol; col < endCol; col++) {
+          const offsetX = (row % 2) * (colSpacing / 2);
+          const baseX = col * colSpacing + offsetX + bgOffsetX;
+          const baseY = row * rowSpacing + bgOffsetY;
+          let dx = baseX - mouse.x, dy = baseY - mouse.y;
+          let dist = Math.sqrt(dx*dx + dy*dy);
+          let adjX = baseX, adjY = baseY;
+
+          if (dist < 150) {
+            const force = (1 - dist/150) * 4;
+            adjX += Math.sin(dy/20) * force;
+            adjY += Math.cos(dx/20) * force;
+          }
+
+          ripples.forEach(rp => {
+            const dxr = baseX - rp.x;
+            const dyr = baseY - rp.y;
+            const distR = Math.sqrt(dxr*dxr + dyr*dyr);
+            if (distR < 200) {
+              const force = (1 - distR/200) * rp.strength;
+              adjX += Math.sin(dyr/20) * force;
+              adjY += Math.cos(dxr/20) * force;
+            }
+          });
+
+          drawHex(adjX, adjY, r);
+        }
+      }
+    }
+
+    function animate() {
+      bgOffsetX += 0.12;
+      bgOffsetY += 0.06;
+      drawBackground();
+      ripples = ripples.filter(r => (r.strength -= 0.6) > 0);
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    document.addEventListener('mousemove', e => (mouse = { x: e.clientX, y: e.clientY }));
+    document.addEventListener('mouseleave', () => (mouse = { x: -1000, y: -1000 }));
+    document.addEventListener('click', e => ripples.push({ x: e.clientX, y: e.clientY, strength: 18 }));
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+  })();
+
+  // ----------------- Gallery behavior with nested folders -----------------
+  (function(){
+    const galleryGrid = document.getElementById('galleryGrid');
+    const searchInput = document.getElementById('searchInput');
+    const previewImg = document.getElementById('previewImg');
+    const tagRow = document.getElementById('tagRow');
+    const miniPreviews = document.getElementById('miniPreviews');
+    const folders = Array.from(document.querySelectorAll('.folder-card'));
+    let activeFolder = null;
+
+    // Show only top-level folders initially
+    function showTopLevel() {
+      folders.forEach(f => {
+        f.style.display = !f.dataset.parent ? '' : 'none';
+      });
+    }
+
+    showTopLevel();
+
+    // Build tag set
+    const tagSet = new Set();
+    folders.forEach(f => {
+      const t = (f.dataset.tags||'').split(',').map(s=>s.trim()).filter(Boolean);
+      t.forEach(x=>tagSet.add(x));
+    });
+
+    // Populate tags
+    tagSet.forEach(t => {
+      const btn = document.createElement('button');
+      btn.className = 'tag';
+      btn.type = 'button';
+      btn.textContent = t;
+      btn.dataset.tag = t;
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('selected');
+        applyFilters();
+      });
+      tagRow.appendChild(btn);
+    });
+
+    function applyFilters() {
+      const q = searchInput.value.trim().toLowerCase();
+      const selectedTags = Array.from(document.querySelectorAll('.tag.selected')).map(b=>b.dataset.tag.toLowerCase());
+      const tokens = q.length ? q.split(/\s+/).map(s=>s.trim()).filter(Boolean) : [];
+
+      folders.forEach(card => {
+        const title = (card.dataset.title||'').toLowerCase();
+        const tags = (card.dataset.tags||'').toLowerCase();
+        const text = (card.dataset.text||'').toLowerCase();
+        const folder = (card.dataset.folder||'').toLowerCase();
+        const combined = title+" "+tags+" "+text+" "+folder;
+        let tokensOK = tokens.every(tok => combined.includes(tok));
+        let tagsOK = selectedTags.every(t => tags.split(',').includes(t));
+        card.style.display = (tokensOK && tagsOK) ? card.style.display : 'none';
+      });
+    }
+    searchInput.addEventListener('input', applyFilters);
+
+    function updateMiniPreviews() {
+      const visible = folders.filter(f=>f.style.display !== 'none');
+      miniPreviews.innerHTML = '';
+      visible.slice(0,8).forEach(f => {
+        const im = document.createElement('img');
+        im.src = f.dataset.thumb || f.querySelector('img')?.src;
+        im.alt = 'recent';
+        miniPreviews.appendChild(im);
+      });
+    }
+
+    // Initialize view from URL hash
+    function updateFromHash() {
+      const hash = decodeURIComponent(location.hash.replace('#',''));
+      if(!hash) {
+        activeFolder = null;
+        showTopLevel();
+      } else {
+        activeFolder = hash;
+        folders.forEach(f => {
+          const parent = f.dataset.parent || null;
+          f.style.display = (f.dataset.folder === hash || parent === hash) ? '' : 'none';
+        });
+      }
+      updateMiniPreviews();
+    }
+
+    updateFromHash();
+
+    window.addEventListener('popstate', updateFromHash);
+    window.addEventListener('hashchange', updateFromHash);
+
+    // Folder click handler
+    folders.forEach(card => {
+      card.addEventListener('click', () => {
+        const folderName = card.dataset.folder;
+
+        if(activeFolder === folderName) {
+          activeFolder = card.dataset.parent || null;
+        } else {
+          activeFolder = folderName;
+        }
+
+        folders.forEach(f => {
+          const parent = f.dataset.parent || null;
+          if(!activeFolder) {
+            f.style.display = !f.dataset.parent ? '' : 'none';
+          } else {
+            f.style.display = (f.dataset.folder === activeFolder || parent === activeFolder) ? '' : 'none';
+          }
+        });
+
+        // Update URL hash
+        if(activeFolder) {
+          history.pushState({folder: activeFolder}, '', `#${encodeURIComponent(activeFolder)}`);
+        } else {
+          history.pushState({folder:null}, '', location.pathname);
+        }
+
+        updateMiniPreviews();
+      });
+
+      // Hover preview
+      card.addEventListener('mouseenter', () => {
+        const src = card.dataset.thumb || card.querySelector('img')?.src;
+        if(src) previewImg.src = src;
+        miniPreviews.innerHTML = '';
+        for(let i=0;i<6;i++){
+          const im = document.createElement('img');
+          im.src = src;
+          im.alt = card.dataset.folder + ' preview ' + i;
+          miniPreviews.appendChild(im);
+        }
+      });
+
+      // Keyboard accessibility
+      card.addEventListener('keydown', e => { if(e.key==='Enter') card.click(); });
+    });
+
+    document.getElementById('backToPrev')?.addEventListener('click', ()=>history.back());
+
+    // Inject icons
+    document.querySelectorAll('[data-icon]').forEach(el => {
+      const url = el.dataset.icon;
+      if(url && url.startsWith('data:')){
+        try{ el.innerHTML = decodeURIComponent(url.split(',')[1]); }catch(e){}
+        return;
+      }
+      fetch(url).then(res=>res.text()).then(svg=>{ el.innerHTML = svg }).catch(()=>{});
+    });
+
+  })();
+</script>
+</body>
+</html>
