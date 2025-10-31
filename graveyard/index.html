@@ -395,6 +395,36 @@ nav a:hover{color:var(--accent)}
                                 <div class="label">If Those Kids Could Read</div>
 </a>
 
+<a href="/graveyard/image/46" class="folder-card" data-id="46" data-tags="paint,teacher:,alright,class,today,we're,are,going,to,school,class,children,kids:,named,finger" data-thumb="/graveyard/image/46/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/46/image.png">
+                                <div class="label">Fingerpaint</div>
+</a>
+
+<a href="/graveyard/image/47" class="folder-card" data-id="47" data-tags="a,lot,of,red,pills,mixed,blue,searching,surfing,rubbing,glove,addiction,addicted,obvious,choice,that,gives,you,a,million,dollars,makes,infinite,copies,itself,when,look,at,it,this,is,bullshit,now,i,can't,cannot,find,the,one" data-thumb="/graveyard/image/47/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/47/image.png">
+                                <div class="label">Blue Pill Red Pill</div>
+</a>
+
+<a href="/graveyard/image/48" class="folder-card" data-id="48" data-tags="out,in,the,way,pushing,destroying,bumping,brutal,force,crash,tracks,desert,street,school,bus,train,choo,undersestimating,understatement,all,she,can,say,is,no,2020,me" data-thumb="/graveyard/image/48/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/48/image.png">
+                                <div class="label">Train Hitting School Bus</div>
+</a>
+
+<a href="/graveyard/image/49" class="folder-card" data-id="49" data-tags="heavy,gun,weapon,firearms,smile,dark,light,bright,black,white,background,pale,return,table,pc,computer,social,media,team,fortress,tf2,thumbs,up,like,finger,big,hand,1),step,one,open,reddit,2),two,3),three,close" data-thumb="/graveyard/image/49/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/49/image.png">
+                                <div class="label">Open Close Reddit</div>
+</a>
+
+<a href="/graveyard/image/50" class="folder-card" data-id="50" data-tags="training,lifting,heavy,weight,bench,press,exercise,skeleton,bones,visible,skull,squatting,200kg,death,jim,s.,my,body,is,a,machine,that,turns,x,ice,cream,into,y,diarrhea" data-thumb="/graveyard/image/50/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/50/image.png">
+                                <div class="label">My Body Is a Machine</div>
+</a>
+
+<a href="/graveyard/image/50" class="folder-card" data-id="51" data-tags="ugly,ordinary,regular,guys,two,pickup,pick-up,lines,strangers,haircut,beautiful,sexy,looking,yellow,white,background,black,t-shirt,tshirt,call,of,duty,cod,black,opsn,opsm,bad,good,conversation,starter,hey,did,you,gain,weight?,:O,emojicon,face,surprised,curious,look,today" data-thumb="/graveyard/image/51/image.png">
+<img loading="lazy" alt="Image thumbnail" src="/graveyard/image/51/image.png">
+                                <div class="label">Bad Good Conversation Starter</div>
+</a>
+
           </div>
         </div>
       </div>
@@ -417,6 +447,7 @@ nav a:hover{color:var(--accent)}
             <!-- small previews will appear here on hover -->
           </div>
         </div>
+		<div class="label">Last Updated: October 31st, 2025</div>
       </aside>
 
     </div>
@@ -562,7 +593,7 @@ nav a:hover{color:var(--accent)}
         const combined = title+" "+tags+" "+text+" "+folder;
         let tokensOK = tokens.every(tok => combined.includes(tok));
         let tagsOK = selectedTags.every(t => tags.split(',').includes(t));
-        card.style.display = (tokensOK && tagsOK) ? card.style.display : 'none';
+        card.style.display = (tokensOK && tagsOK) ? '' : 'none';
       });
     }
     searchInput.addEventListener('input', applyFilters);
