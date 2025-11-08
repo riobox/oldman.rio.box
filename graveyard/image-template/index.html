@@ -274,7 +274,9 @@ metaId.textContent = currentId || '—';
 metaTitle.textContent = 'Image ' + (currentId || '');
 
 // Set image source relative to current folder
-mainImage.src = './image.png';
+// Determine correct image source (works both statically and via 404 loader)
+const imagePath = `/graveyard/image/${currentId}/image.png`;
+mainImage.src = imagePath;
 mainImage.alt = 'Image ' + (currentId || '');
 
 // Navigation buttons

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>404 Not Found</title>
+  <script>
+    const path = window.location.pathname;
+
+    // Match only URLs like /graveyard/image/1, /graveyard/image/2, etc.
+    const match = path.match(/^\/graveyard\/image\/(\d+)\/?$/);
+
+    if (match) {
+      const id = match[1];
+
+      // Dynamically load your shared image template
+      fetch('/graveyard/image-template/index.html')
+        .then(res => {
+          if (!res.ok) throw new Error('Template not found');
+          return res.text();
+        })
+        .then(html => {
+          // Replace this page with your actual template
+          document.open();
+          document.write(html);
+          document.close();
+
+          // Wait until template is loaded, then inject the image
+          const tryInject = () => {
+            const img = document.getElementById('main-image');
+            if (img) {
+              img.src = `/graveyard/image/${id}/image.png`;
+              document.title = `Image ${id}`;
+            } else {
+              setTimeout(tryInject, 50);
+            }
+          };
+          tryInject();
+        })
+        .catch(err => console.error('Error loading template:', err));
+    } else {
+      // Not an /graveyard/image/X URL — show normal 404 content
+      console.log('Normal 404 page');
+    }
+  </script>
+</head>
+<body>
+  <h1>404 Not Found</h1>
+  <p>The page you are looking for doesn’t exist.</p>
+</body>
+</html>
