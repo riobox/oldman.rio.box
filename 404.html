@@ -1,50 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+  body {
+    margin: 0;
+    font-family: sans-serif;
+  }
+
+  #spinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 9999;
+  }
+
+  .loader {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #39d353; /* green accent */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 10px auto;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* hide the body initially */
+  body:not(.show) {
+    visibility: hidden;
+  }
+</style>
   <meta charset="UTF-8">
   <title>404 Not Found</title>
   <script>
-    const path = window.location.pathname;
+const path = window.location.pathname;
 
-    // Matches either /image/123 or /graveyard/image/123
-    const match = path.match(/^(?:\/graveyard)?\/image\/(\d+)\/?$/);
+// Matches either /image/123 or /graveyard/image/123
+const match = path.match(/^(?:\/graveyard)?\/image\/(\d+)\/?$/);
 
-    if (match) {
-      const id = match[1];
-      const isInGraveyard = path.startsWith('/graveyard');
+if (match) {
+  const id = match[1];
+  const isInGraveyard = path.startsWith('/graveyard');
+  const base = isInGraveyard ? '/graveyard' : '';
 
-      // Pick the right base folder depending on which section you're in
-      const base = isInGraveyard ? '/graveyard' : '';
+  // Show spinner (it’s visible by default)
+  const spinner = document.getElementById('spinner');
 
-      fetch(`${base}/image-template/index.html`)
-        .then(res => {
-          if (!res.ok) throw new Error('Template not found');
-          return res.text();
-        })
-        .then(html => {
-          document.open();
-          document.write(html);
-          document.close();
+  fetch(`${base}/image-template/index.html`)
+    .then(res => {
+      if (!res.ok) throw new Error('Template not found');
+      return res.text();
+    })
+    .then(html => {
+      document.open();
+      document.write(html);
+      document.close();
 
-          // Inject the correct image
-          const tryInject = () => {
-            const img = document.getElementById('mainImage');
-            if (img) {
-              img.src = `${base}/image/${id}/image.png`;
-              document.title = `Image ${id}`;
-            } else {
-              setTimeout(tryInject, 50);
-            }
-          };
-          tryInject();
-        })
-        .catch(err => console.error('Error loading template:', err));
-    } else {
-      console.log('Normal 404 page');
-    }
-  </script>
+      // Inject the correct image
+      const tryInject = () => {
+        const img = document.getElementById('mainImage');
+        if (img) {
+          img.src = `${base}/image/${id}/image.png`;
+          document.title = `Image ${id}`;
+
+          // Hide spinner and show page
+          document.body.classList.add('show');
+        } else {
+          setTimeout(tryInject, 50);
+        }
+      };
+      tryInject();
+    })
+    .catch(err => {
+      console.error('Error loading template:', err);
+      // Hide spinner, show normal 404
+      spinner.style.display = 'none';
+      document.body.classList.add('show');
+    });
+} else {
+  // Not an /image/X URL — show normal 404
+  document.body.classList.add('show');
+}
+</script>
 </head>
 <body>
+  <div id="spinner">
+    <div class="loader"></div>
+    <p>Loading…</p>
+  </div>
+
   <h1>404 Not Found</h1>
   <p>The page you are looking for doesn’t exist.</p>
 </body>
